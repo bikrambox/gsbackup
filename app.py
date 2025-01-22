@@ -41,58 +41,58 @@ def list_databases():
 
 
 
+  # try:
+  #     conn = pyodbc.connect(connection_string)
+  #     print("Connection successful!")
+
+  #     cursor = conn.cursor()
+  #     cursor.execute("SELECT name FROM sys.databases")
+  #     rows = cursor.fetchall()
+
+  #     print("List of databases:")
+  #     for row in rows:
+  #         print(row[0]) 
+
+  # except pyodbc.Error as ex:
+  #     print("Connection error:", ex)
+  #     # Handle the connection error here (e.g., log the error, send an alert)
+  # finally:
+  #     if conn:
+  #         conn.close()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   try:
-      conn = pyodbc.connect(connection_string)
-      print("Connection successful!")
+    conn = pyodbc.connect(connection_string)
+    cursor = conn.cursor()
 
-      cursor = conn.cursor()
-      cursor.execute("SELECT name FROM sys.databases")
-      rows = cursor.fetchall()
+    cursor.execute("SELECT name FROM sys.databases")
+    databases = [row[0] for row in cursor.fetchall()]
 
-      print("List of databases:")
-      for row in rows:
-          print(row[0]) 
+    cursor.close()
+    conn.close()
 
-  except pyodbc.Error as ex:
-      print("Connection error:", ex)
-      # Handle the connection error here (e.g., log the error, send an alert)
-  finally:
-      if conn:
-          conn.close()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-#   try:
-#     conn = pyodbc.connect(connection_string)
-#     cursor = conn.cursor()
+    return databases
 
-#     cursor.execute("SELECT name FROM sys.databases")
-#     databases = [row[0] for row in cursor.fetchall()]
+  except pyodbc.Error as e:
+    print(f"Error: {e}")
+    return []
 
-#     cursor.close()
-#     conn.close()
+if __name__ == "__main__":
+  databases = list_databases()
 
-#     return databases
-
-#   except pyodbc.Error as e:
-#     print(f"Error: {e}")
-#     return []
-
-# if __name__ == "__main__":
-#   databases = list_databases()
-
-#   if databases:
-#     print("Available databases:")
-#     for db in databases:
-#       print(db)
-#   else:
-#     print("No databases found.")
+  if databases:
+    print("Available databases:")
+    for db in databases:
+      print(db)
+  else:
+    print("No databases found.")
