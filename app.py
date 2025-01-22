@@ -1,136 +1,136 @@
-# # import requests
-# # from bs4 import BeautifulSoup
-# # import json
-# # import html
-# # import sys
-# # import pyodbc
+# import requests
+# from bs4 import BeautifulSoup
+# import json
+# import html
+# import sys
+# import pyodbc
 
 
 
-# # def scrape_table_data():
-# #     try:
-# #         # URLs
-# #         login_page_url = "https://c4api.care4all.dk/login"
-# #         login_url = "https://c4api.care4all.dk/login"
-# #         data_url = "https://c4api.care4all.dk/units"
+# def scrape_table_data():
+#     try:
+#         # URLs
+#         login_page_url = "https://c4api.care4all.dk/login"
+#         login_url = "https://c4api.care4all.dk/login"
+#         data_url = "https://c4api.care4all.dk/units"
 
-# #         # User credentials
-# #         username = "gsgroup-service@bhslogistics.dk"
-# #         password = "CHSC6ZFM"
+#         # User credentials
+#         username = "gsgroup-service@bhslogistics.dk"
+#         password = "CHSC6ZFM"
 
-# #         # Create a session
-# #         session = requests.Session()
+#         # Create a session
+#         session = requests.Session()
 
-# #         # Headers to mimic a browser
-# #         headers = {
-# #             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-# #             "Referer": login_page_url
-# #         }
+#         # Headers to mimic a browser
+#         headers = {
+#             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+#             "Referer": login_page_url
+#         }
 
-# #         # Step 1: Get the login page
-# #         response = session.get(login_page_url, headers=headers)
-# #         response.encoding = "utf-8"  # Ensure correct encoding
-# #         if response.status_code != 200:
-# #             return {"error": f"Failed to load login page: {response.status_code}"}
+#         # Step 1: Get the login page
+#         response = session.get(login_page_url, headers=headers)
+#         response.encoding = "utf-8"  # Ensure correct encoding
+#         if response.status_code != 200:
+#             return {"error": f"Failed to load login page: {response.status_code}"}
 
-# #         # Parse the login page to extract CSRF token
-# #         soup = BeautifulSoup(response.text, "html.parser")
-# #         csrf_token = soup.find("input", {"name": "csrf"})["value"]
-# #         if not csrf_token:
-# #             return {"error": "CSRF token not found in the login page."}
+#         # Parse the login page to extract CSRF token
+#         soup = BeautifulSoup(response.text, "html.parser")
+#         csrf_token = soup.find("input", {"name": "csrf"})["value"]
+#         if not csrf_token:
+#             return {"error": "CSRF token not found in the login page."}
 
-# #         # Step 2: Log in with credentials
-# #         credentials = {
-# #             "username": username,
-# #             "password": password,
-# #             "csrf": csrf_token
-# #         }
+#         # Step 2: Log in with credentials
+#         credentials = {
+#             "username": username,
+#             "password": password,
+#             "csrf": csrf_token
+#         }
 
-# #         login_response = session.post(login_url, data=credentials, headers=headers)
-# #         if login_response.status_code != 200:
-# #             return {"error": "Login failed. Please check your credentials or CSRF handling."}
+#         login_response = session.post(login_url, data=credentials, headers=headers)
+#         if login_response.status_code != 200:
+#             return {"error": "Login failed. Please check your credentials or CSRF handling."}
 
-# #         # Step 3: Access the data page
-# #         data_response = session.get(data_url, headers=headers)
-# #         data_response.encoding = "utf-8"  # Ensure correct encoding
-# #         if data_response.status_code != 200:
-# #             return {"error": f"Failed to access data page: {data_response.status_code}"}
+#         # Step 3: Access the data page
+#         data_response = session.get(data_url, headers=headers)
+#         data_response.encoding = "utf-8"  # Ensure correct encoding
+#         if data_response.status_code != 200:
+#             return {"error": f"Failed to access data page: {data_response.status_code}"}
 
-# #         # Parse the table data
-# #         soup = BeautifulSoup(data_response.text, "html.parser")
-# #         table = soup.find("table")
-# #         if not table:
-# #             return {"error": "No table found on the page."}
+#         # Parse the table data
+#         soup = BeautifulSoup(data_response.text, "html.parser")
+#         table = soup.find("table")
+#         if not table:
+#             return {"error": "No table found on the page."}
 
-# #         # Extract table data
-# #         table_data = []
-# #         rows = table.find("tbody").find_all("tr")
-# #         for row in rows:
-# #             cells = row.find_all("td")
-# #             row_data = [html.unescape(cell.text.strip()) for cell in cells]  # Decode HTML entities
-# #             table_data.append(", ".join(row_data))
+#         # Extract table data
+#         table_data = []
+#         rows = table.find("tbody").find_all("tr")
+#         for row in rows:
+#             cells = row.find_all("td")
+#             row_data = [html.unescape(cell.text.strip()) for cell in cells]  # Decode HTML entities
+#             table_data.append(", ".join(row_data))
 
-# #         return {"Table Data": table_data}
+#         return {"Table Data": table_data}
 
-# #     except Exception as e:
-# #         return {"error": str(e)}
+#     except Exception as e:
+#         return {"error": str(e)}
 
 
-# # def list_databases():
-# #   """
-# #   Lists all databases available on the SQL Server instance.
+# def list_databases():
+#   """
+#   Lists all databases available on the SQL Server instance.
 
-# #   Returns:
-# #     A list of database names.
-# #   """
+#   Returns:
+#     A list of database names.
+#   """
 
-# #   # Detailed connection parameters
-# #   # server = '10.0.0.33'
-# #   server = 'bhs-sql2'
-# #   database = 'Gsgroup_backup'
-# #   username = 'bulkattain_reader'
-# #   password = 'Efteraar2023!'
-# #   trusted_connection = 'yes'  # Windows authentication
-# #   port = '1433'  # Default SQL Server port
+#   # Detailed connection parameters
+#   # server = '10.0.0.33'
+#   server = 'bhs-sql2'
+#   database = 'Gsgroup_backup'
+#   username = 'bulkattain_reader'
+#   password = 'Efteraar2023!'
+#   trusted_connection = 'yes'  # Windows authentication
+#   port = '1433'  # Default SQL Server port
 
-# #   connection_string =f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection={trusted_connection}'
+#   connection_string =f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection={trusted_connection}'
     
-# #   try:
-# #     conn = pyodbc.connect(connection_string)
-# #     print("Connection successful!")
-# #     cursor = conn.cursor()
+#   try:
+#     conn = pyodbc.connect(connection_string)
+#     print("Connection successful!")
+#     cursor = conn.cursor()
 
-# #     cursor.execute("SELECT name FROM sys.databases")
-# #     databases = [row[0] for row in cursor.fetchall()]
+#     cursor.execute("SELECT name FROM sys.databases")
+#     databases = [row[0] for row in cursor.fetchall()]
 
-# #     cursor.close()
-# #     conn.close()
+#     cursor.close()
+#     conn.close()
 
-# #     return databases
+#     return databases
 
-# #   except pyodbc.Error as e:
-# #     print(f"Error: {e}")
-# #     return []
+#   except pyodbc.Error as e:
+#     print(f"Error: {e}")
+#     return []
 
 
-# # def main(args):
-# #     data = scrape_table_data()
-# #     print(json.dumps(data, indent=4, ensure_ascii=False))  # ensure_ascii=False for proper character rendering
+# def main(args):
+#     data = scrape_table_data()
+#     print(json.dumps(data, indent=4, ensure_ascii=False))  # ensure_ascii=False for proper character rendering
     
     
-# #     databases = list_databases()
+#     databases = list_databases()
 
-# #     if databases:
-# #       print("Available databases:")
-# #       for db in databases:
-# #           print(db)
-# #     else:
-# #       print("No databases found.")
+#     if databases:
+#       print("Available databases:")
+#       for db in databases:
+#           print(db)
+#     else:
+#       print("No databases found.")
 
 
 
-# # if __name__ == '__main__':
-# #     main(sys.argv)
+# if __name__ == '__main__':
+#     main(sys.argv)
 
 
 
@@ -348,178 +348,118 @@ import sys
 import pyodbc
 
 def scrape_table_data():
-    """
-    Scrapes table data from the specified URL.
-
-    Returns:
-        dict: A dictionary containing the scraped table data.
-    """
     try:
-        # URLs
+        # URLs and credentials remain the same
         login_page_url = "https://c4api.care4all.dk/login"
         login_url = "https://c4api.care4all.dk/login"
         data_url = "https://c4api.care4all.dk/units"
-
-        # User credentials
         username = "gsgroup-service@bhslogistics.dk"
         password = "CHSC6ZFM"
 
-        # Create a session
         session = requests.Session()
-
-        # Headers to mimic a browser
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
             "Referer": login_page_url
         }
 
-        # Step 1: Get the login page
+        # Login process remains the same
         response = session.get(login_page_url, headers=headers)
-        response.encoding = "utf-8"  # Ensure correct encoding
-
+        response.encoding = "utf-8"
         if response.status_code != 200:
             return {"error": f"Failed to load login page: {response.status_code}"}
 
-        # Parse the login page to extract CSRF token
         soup = BeautifulSoup(response.text, "html.parser")
         csrf_token = soup.find("input", {"name": "csrf"})["value"]
-
         if not csrf_token:
             return {"error": "CSRF token not found in the login page."}
 
-        # Step 2: Log in with credentials
         credentials = {
             "username": username,
             "password": password,
             "csrf": csrf_token
         }
-
+        
         login_response = session.post(login_url, data=credentials, headers=headers)
-
         if login_response.status_code != 200:
             return {"error": "Login failed. Please check your credentials or CSRF handling."}
 
-        # Step 3: Access the data page
         data_response = session.get(data_url, headers=headers)
-        data_response.encoding = "utf-8"  # Ensure correct encoding
-
+        data_response.encoding = "utf-8"
         if data_response.status_code != 200:
-            return {"error": f"Failed to access data page: {response.status_code}"}
+            return {"error": f"Failed to access data page: {data_response.status_code}"}
 
-        # Parse the table data
+        # Modified table data extraction to handle empty values
         soup = BeautifulSoup(data_response.text, "html.parser")
         table = soup.find("table")
-
         if not table:
             return {"error": "No table found on the page."}
 
-        # Extract table data
         table_data = []
         rows = table.find("tbody").find_all("tr")
-
         for row in rows:
             cells = row.find_all("td")
-            row_data = [html.unescape(cell.text.strip()) for cell in cells]  # Decode HTML entities
-            table_data.append(row_data)
+            # Replace empty values with "NULL"
+            row_data = []
+            for cell in cells:
+                value = html.unescape(cell.text.strip())
+                row_data.append("NULL" if value == "" else value)
+            table_data.append(", ".join(row_data))
 
         return {"Table Data": table_data}
-
     except Exception as e:
         return {"error": str(e)}
 
-def list_databases():
-    """
-    Lists all databases available on the SQL Server instance.
-
-    Returns:
-        A list of database names.
-    """
-    # Detailed connection parameters
-    server = 'bhs-sql2'  # Replace with your server name
+def insert_into_database(table_data):
+    server = 'bhs-sql2'
     database = 'Gsgroup_backup'
-    username = 'bulkattain_reader'
-    password = 'Efteraar2023!'
-    trusted_connection = 'yes'  # Windows authentication
-    port = '1433'  # Default SQL Server port
-
+    trusted_connection = 'yes'
     connection_string = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection={trusted_connection}'
-
+    
     try:
         conn = pyodbc.connect(connection_string)
-        print("Connection successful!")
         cursor = conn.cursor()
-
-        cursor.execute("SELECT name FROM sys.databases")
-        databases = [row[0] for row in cursor.fetchall()]
-
+        
+        for row in table_data:
+            # Split the row string into individual values
+            values = row.split(", ")
+            
+            # Replace "NULL" string with actual NULL value
+            values = [None if v == "NULL" else v for v in values]
+            
+            # SQL insert statement
+            sql = """
+            INSERT INTO Gsgroup_backup.dbo.units01 
+            (ID, Number, Sequence, Name, Description, GUID, Model, Locale, Subscription, Timezone)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """
+            
+            cursor.execute(sql, values)
+        
+        conn.commit()
         cursor.close()
         conn.close()
-
-        return databases
-
+        return True
     except pyodbc.Error as e:
-        print(f"Error: {e}")
-        return []
-
-def insert_data(data_row):
-    """
-    Inserts a data row into the specified table.
-
-    Args:
-        data_row (list): A list containing the values to be inserted into the table columns.
-
-    Returns:
-        dict: A dictionary with a message indicating success or failure.
-    """
-    # Detailed connection parameters
-    server = 'bhs-sql2'  # Replace with your server name
-    database = 'Gsgroup_backup'
-    username = 'bulkattain_reader'
-    password = 'Efteraar2023!'
-    trusted_connection = 'yes'  # Windows authentication
-    port = '1433'  # Default SQL Server port
-
-    connection_string = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection={trusted_connection}'
-
-    try:
-        conn = pyodbc.connect(connection_string)
-        cursor = conn.cursor()
-
-        columns = ["ID", "Name", "Number", "Sequence", "Description", "GUID", "Model", "Locale", "Subscription", "Timezone"]
-        placeholders = ", ".join(["?"] * len(columns))
-        insert_stmt = f"INSERT INTO [dbo].[units01] ({columns}) VALUES ({placeholders})"
-
-        # Handle empty data and convert to NULL
-        cleaned_data_row = []
-        for value in data_row:
-            if value.strip() == "":
-                cleaned_data_row.append(None)
-            else:
-                cleaned_data_row.append(value)
-
-        cursor.execute(insert_stmt, cleaned_data_row)
-        conn.commit()
-        return {"message": "Data inserted successfully!"}
-
-    except pyodbc.Error as e:
-        print(f"Error inserting data: {e}")
-        return {"error": str(e)}
-
-    finally:
-        if conn:
-            conn.close()
+        print(f"Database Error: {str(e)}")
+        return False
 
 def main(args):
+    # Scrape data
     data = scrape_table_data()
-
+    
     if "error" in data:
-        print(f"Error: {data['error']}")
-    else:
-        for row in data["Table Data"]:
-            insert_result = insert_data(row)
-            print(insert_result)
-
-    # ... (code to list databases can be removed if not needed)
+        print("Error scraping data:", data["error"])
+        return
+    
+    # Insert data into database
+    if "Table Data" in data:
+        success = insert_into_database(data["Table Data"])
+        if success:
+            print("Data successfully inserted into database")
+        else:
+            print("Failed to insert data into database")
+    
+    print(json.dumps(data, indent=4, ensure_ascii=False))
 
 if __name__ == '__main__':
     main(sys.argv)
