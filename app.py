@@ -338,77 +338,6 @@
 
 
 
-
-
-import requests
-from bs4 import BeautifulSoup
-import json
-import html
-import sys
-import pyodbc
-
-def scrape_table_data():
-    try:
-        # URLs and credentials remain the same
-        login_page_url = "https://c4api.care4all.dk/login"
-        login_url = "https://c4api.care4all.dk/login"
-        data_url = "https://c4api.care4all.dk/units"
-        username = "gsgroup-service@bhslogistics.dk"
-        password = "CHSC6ZFM"
-
-        session = requests.Session()
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-            "Referer": login_page_url
-        }
-
-        # Login process remains the same
-        response = session.get(login_page_url, headers=headers)
-        response.encoding = "utf-8"
-        if response.status_code != 200:
-            return {"error": f"Failed to load login page: {response.status_code}"}
-
-        soup = BeautifulSoup(response.text, "html.parser")
-        csrf_token = soup.find("input", {"name": "csrf"})["value"]
-        if not csrf_token:
-            return {"error": "CSRF token not found in the login page."}
-
-        credentials = {
-            "username": username,
-            "password": password,
-            "csrf": csrf_token
-        }
-        
-        login_response = session.post(login_url, data=credentials, headers=headers)
-        if login_response.status_code != 200:
-            return {"error": "Login failed. Please check your credentials or CSRF handling."}
-
-        data_response = session.get(data_url, headers=headers)
-        data_response.encoding = "utf-8"
-        if data_response.status_code != 200:
-            return {"error": f"Failed to access data page: {data_response.status_code}"}
-
-        # Modified table data extraction to handle empty values
-        soup = BeautifulSoup(data_response.text, "html.parser")
-        table = soup.find("table")
-        if not table:
-            return {"error": "No table found on the page."}
-
-        table_data = []
-        rows = table.find("tbody").find_all("tr")
-        for row in rows:
-            cells = row.find_all("td")
-            # Replace empty values with "NULL"
-            row_data = []
-            for cell in cells:
-                value = html.unescape(cell.text.strip())
-                row_data.append("NULL" if value == "" else value)
-            table_data.append(", ".join(row_data))
-
-        return {"Table Data": table_data}
-    except Exception as e:
-        return {"error": str(e)}
-
 def insert_into_database(table_data):
     server = 'bhs-sql2'
     database = 'Gsgroup_backup'
@@ -423,43 +352,34 @@ def insert_into_database(table_data):
             # Split the row string into individual values
             values = row.split(", ")
             
-            # Replace "NULL" string with actual NULL value
-            values = [None if v == "NULL" else v for v in values]
+            # Process values based on the correct column order
+            processed_values = []
+            for i, v in enumerate(values):
+                if i == 3:  # Name column
+                    processed_values.append(v if v != "NULL" else "")  # Use empty string instead of NULL
+                else:
+                    processed_values.append(None if v == "NULL" else v)
             
-            # SQL insert statement
+            # Corrected SQL insert statement with proper column order
             sql = """
             INSERT INTO Gsgroup_backup.dbo.units01 
             (ID, Number, Sequence, Name, Description, GUID, Model, Locale, Subscription, Timezone)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
             
-            cursor.execute(sql, values)
+            try:
+                cursor.execute(sql, processed_values)
+                conn.commit()  # Commit after each successful insert
+                print(f"Successfully inserted row with values: {processed_values}")
+            except pyodbc.Error as row_error:
+                print(f"Error inserting row: {str(row_error)}")
+                print(f"Problematic values: {processed_values}")
+                conn.rollback()  # Rollback on error
+                continue  # Continue with next row
         
-        conn.commit()
         cursor.close()
         conn.close()
         return True
     except pyodbc.Error as e:
         print(f"Database Error: {str(e)}")
         return False
-
-def main(args):
-    # Scrape data
-    data = scrape_table_data()
-    
-    if "error" in data:
-        print("Error scraping data:", data["error"])
-        return
-    
-    # Insert data into database
-    if "Table Data" in data:
-        success = insert_into_database(data["Table Data"])
-        if success:
-            print("Data successfully inserted into database")
-        else:
-            print("Failed to insert data into database")
-    
-    print(json.dumps(data, indent=4, ensure_ascii=False))
-
-if __name__ == '__main__':
-    main(sys.argv)
