@@ -17,7 +17,7 @@ def list_databases():
   port = '1433'  # Default SQL Server port
 
   connection_string = f"""
-  DRIVER={{ODBC Driver 18 for SQL Server}};
+  DRIVER={{SQL Server}};
   SERVER={server};
   DATABASE={database};
   Encrypt=yes;
