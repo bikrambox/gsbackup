@@ -73,6 +73,7 @@ def list_databases():
     
   try:
     conn = pyodbc.connect(connection_string)
+    print("Connection successful!")
     cursor = conn.cursor()
 
     cursor.execute("SELECT name FROM sys.databases")
