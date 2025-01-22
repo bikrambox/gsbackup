@@ -9,23 +9,16 @@ def list_databases():
   """
 
   # Detailed connection parameters
-  server = '10.0.0.33'
+  # server = '10.0.0.33'
+  server = 'bhs-sql2'
   database = 'Gsgroup_backup'
   username = 'bulkattain_reader'
   password = 'Efteraar2023!'
   trusted_connection = 'yes'  # Windows authentication
   port = '1433'  # Default SQL Server port
 
-  connection_string = f"""
-  DRIVER={{SQL Server}};
-  SERVER={server};
-  DATABASE={database};
-  Encrypt=yes;
-  Trusted_Connection={trusted_connection};
-  TrustServerCertificate=yes;
-  Connection Timeout=60;
-  Login Timeout=60;
-  """
+  connection_string =f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection={trusted_connection}'
+  
   # connection_string = f"""
   # DRIVER={{ODBC Driver 18 for SQL Server}};
   # SERVER={server},{port};
