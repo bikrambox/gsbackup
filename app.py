@@ -278,14 +278,27 @@ def insert_data(data_row):
     conn = pyodbc.connect(connection_string)
     cursor = conn.cursor()
 
-    # Construct the INSERT statement with placeholders for values
-    columns = ", ".join(["ID", "Name", "Number", "Sequence", "Description", "GUID", "Model", "Locale", "Subscription", "Timezone"])
-    placeholders = ", ".join(["?"] * len(data_row))
+    # # Construct the INSERT statement with placeholders for values
+    # columns = ", ".join(["ID", "Name", "Number", "Sequence", "Description", "GUID", "Model", "Locale", "Subscription", "Timezone"])
+    # placeholders = ", ".join(["?"] * len(data_row))
+    # insert_stmt = f"INSERT INTO [dbo].[units01] ({columns}) VALUES ({placeholders})"
+    columns = ["ID", "Name", "Number", "Sequence", "Description", "GUID", "Model", "Locale", "Subscription", "Timezone"]
+    placeholders = ", ".join(["?"] * len(columns))
     insert_stmt = f"INSERT INTO [dbo].[units01] ({columns}) VALUES ({placeholders})"
-
+  
+  
     # Execute the insert statement with the data row values
     cursor.execute(insert_stmt, data_row)
     conn.commit()
+
+
+  # Handle empty data and convert to NULL
+    cleaned_data_row = []
+    for value in data_row:
+        if value.strip() == "":
+          cleaned_data_row.append(None)
+    else:
+      cleaned_data_row.append(value)
 
     return {"message": "Data inserted successfully!"}
 
@@ -311,26 +324,11 @@ def main(args):
     else:
       print("No databases found.")
 
-
-    # Example data row (replace with actual data from scraping or user input)
-    data_row = [
-        "3ecc948b-0c87-48f6-ab22-a6b83dd899da",
-        "2328001283",
-        0,
-        "ED 27 618 afd410 Van Pharma",
-        "",
-        "43cf4184-a469-4091-9793-a366aec94693",
-        "7L2-D",
-        "da_DK",
-        4,
-        "Europe/Copenhagen"
-    ]
-
-    # Insert the data into the table
-    insert_result = insert_data(data_row)
-    print(json.dumps(insert_result, indent=4))
-
-    # ... (code to list databases can be removed if not needed)
+    for row in data["Table Data"]:
+        # Split the row string into individual values
+        row_values = row.split(", ") 
+        insert_result = insert_data(row_values)
+        print(insert_result)
 
 if __name__ == '__main__':
     main(sys.argv)
