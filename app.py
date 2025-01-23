@@ -344,9 +344,7 @@
     
     
     
-    
-    
-    
+
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -460,8 +458,8 @@ def insert_into_database(table_data):
             # SQL insert statement with correct column order
             sql = """
             INSERT INTO Gsgroup_backup.dbo.units01 
-            (GUID, Number, Sequence, Name, Description, Model, Locale, Subscription, Timezone)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (ID, Number, Sequence, Name, Description, GUID, Model, Locale, Subscription, Timezone)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
             
             ordered_values = [guid, number, sequence, name, description, model, 
