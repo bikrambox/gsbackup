@@ -445,15 +445,16 @@ def insert_into_database(table_data):
                     processed_values.append(None if v == "NULL" else v)
             
             # Reorder values to match the table structure (GUID, Number, Sequence, etc.)
-            guid = processed_values[0]
+            id = processed_values[0]
             number = processed_values[1]
             sequence = processed_values[2]
             name = processed_values[3]
             description = processed_values[4]
-            model = processed_values[5]
-            locale = processed_values[6]
-            subscription = processed_values[7]
-            timezone = processed_values[8] if len(processed_values) > 8 else None
+            guid = processed_values[5]
+            model = processed_values[6]
+            locale = processed_values[7]
+            subscription = processed_values[8]
+            timezone = processed_values[9] if len(processed_values) > 9 else None
             
             # SQL insert statement with correct column order
             sql = """
@@ -462,13 +463,13 @@ def insert_into_database(table_data):
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
             
-            ordered_values = [guid, number, sequence, name, description, model, 
+            ordered_values = [id, number, sequence, name, description, guid,  model, 
                             locale, subscription, timezone]
             
             try:
                 cursor.execute(sql, ordered_values)
                 conn.commit()
-                print(f"Successfully inserted row with GUID: {guid}")
+                print(f"Successfully inserted row with ID: {id}")
             except pyodbc.Error as row_error:
                 print(f"Error inserting row: {str(row_error)}")
                 print(f"Problematic values: {ordered_values}")
