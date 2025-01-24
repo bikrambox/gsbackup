@@ -115,7 +115,7 @@ def insert_into_database(table_data):
             
             # SQL insert statement with correct column order
             sql = """
-            INSERT INTO Gsgroup_backup.dbo.units 
+            INSERT INTO Gsgroup_backup.dbo.units01 
             (ID, Number, Sequence, Name, Description, GUID, Model, Locale, Subscription, Timezone)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
