@@ -70,10 +70,9 @@ def scrape_table_data():
         #         value = html.unescape(cell.text.strip())
         #         row_data.append("NULL" if value == "" else value)
         #     table_data.append(", ".join(row_data))
-        table_data = ["b6r4f6fc-c8ef-4e4d-97f1-291c4f18a9d3, 1128000993, 1, FD 3971 Afd101 K°l Ophµng, Trailer, 1EtqEOAXuHuWEV00000000, 7A2, da_DK, 4, NULL",
-        "98a5fb2a-728f-44e5-839f-16e44c4e6ff4, 1128001343, 1, CU 93 552 Afd105 Kran, Vehicle, 3RjFWcAZmHuWIV00000000, 7A2, da_DK, 4, NULL",
-        "5b815c19-41ca-4c37-a2fa-b697e458bab0, 1129000173, 3, CP 5647 Afd101 K°l SideÕbner, Trailer, 0LVtt4AhyHuWMV00000000, 7A2, da_DK, 4, NULL",
-        "f64132cf-ee95-44a7-aa6b-1bd69b90d7fb, 1129000183, 2, FD 1644 Afd101 K°l Ophµng, Trailer, 2m4_$SAhyHuWMV00000000, 7A2, da_DK, 4, NULL"]
+        table_data = ["37c7cc85-f83c-48ad-bda4-6cf5354ae53b, 1148000833, 2, BZ 61 948 Afd105 Hejs, Vehicle, 1oPELA5V0HudsB00000000, 7A2, da_DK, 4, NULL",
+        "815d4f4a-0095-4b61-af71-b9a87090d254, 1301000523, 1, AT 70 031 Afd105 Trµkker, Vehicle, 9ebea9e2-563b-11e2-9984-001b241de98c, 7A3, da_DK, 4, NULL",
+        "ae8d1df9-5ece-40ea-95e3-80e374ccd131, 1304003273, 2, FD 3967 Afd101 K°l Ophµng, Trailer, 0e6b5de2-6610-11e2-9040-001b241de98c, 7A2, da_DK, 4, NULL"]
 
         return {"Table Data": table_data}
     except Exception as e:
