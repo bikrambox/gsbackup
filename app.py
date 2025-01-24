@@ -62,17 +62,19 @@ def scrape_table_data():
 
         # Extract table data with proper NULL handling
         table_data = []
-        # rows = table.find("tbody").find_all("tr")
-        # for row in rows:
-        #     cells = row.find_all("td")
-        #     row_data = []
-        #     for cell in cells:
-        #         value = html.unescape(cell.text.strip())
-        #         row_data.append("NULL" if value == "" else value)
-        #     table_data.append(", ".join(row_data))
-        table_data = ["37c7cc85-f83c-48ad-bda4-6cf5354ae53b, 1148000833, 2, BZ 61 948 Afd105 Hejs, Vehicle, 1oPELA5V0HudsB00000000, 7A2, da_DK, 4, NULL",
-        "815d4f4a-0095-4b61-af71-b9a87090d254, 1301000523, 1, AT 70 031 Afd105 Trµkker, Vehicle, 9ebea9e2-563b-11e2-9984-001b241de98c, 7A3, da_DK, 4, NULL",
-        "ae8d1df9-5ece-40ea-95e3-80e374ccd131, 1304003273, 2, FD 3967 Afd101 K°l Ophµng, Trailer, 0e6b5de2-6610-11e2-9040-001b241de98c, 7A2, da_DK, 4, NULL"]
+        rows = table.find("tbody").find_all("tr")
+        for row in rows:
+            cells = row.find_all("td")
+            row_data = []
+            for cell in cells:
+                value = html.unescape(cell.text.strip())
+                row_data.append("NULL" if value == "" else value)
+            table_data.append(", ".join(row_data))
+            
+            
+        # table_data = ["37c7cc85-f83c-48ad-bda4-6cf5354ae53b, 1148000833, 2, BZ 61 948 Afd105 Hejs, Vehicle, 1oPELA5V0HudsB00000000, 7A2, da_DK, 4, NULL",
+        # "815d4f4a-0095-4b61-af71-b9a87090d254, 1301000523, 1, AT 70 031 Afd105 Trµkker, Vehicle, 9ebea9e2-563b-11e2-9984-001b241de98c, 7A3, da_DK, 4, NULL",
+        # "ae8d1df9-5ece-40ea-95e3-80e374ccd131, 1304003273, 2, FD 3967 Afd101 K°l Ophµng, Trailer, 0e6b5de2-6610-11e2-9040-001b241de98c, 7A2, da_DK, 4, NULL"]
 
         return {"Table Data": table_data}
     except Exception as e:
