@@ -307,7 +307,7 @@ def insert_into_database(table_data):
             
             # SQL insert statement
             sql = """
-            INSERT INTO Gsgroup_backup.dbo.units02
+            INSERT INTO Gsgroup_backup.dbo.units03
             (ID, Number, Sequence, Name, Description, GUID, Model, Locale, Subscription, Timezone)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
